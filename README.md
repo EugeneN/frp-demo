@@ -1,5 +1,5 @@
 
-# lubeck-minimal-app
+# FRP demo
 
 ## To build
 
