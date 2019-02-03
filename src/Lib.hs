@@ -6,57 +6,16 @@ module Lib
     , resComponent
     , mapComponent
     , coordComponent
-    , hlayout
-    , vlayout
     ) where
 
 import           Data.Monoid                    ((<>))
-import           Data.JSString                  (JSString)
-import           Control.Monad                  (join)
-import qualified Web.VirtualDom.Html            as H
-import qualified Web.VirtualDom.Html.Attributes as A        
-import qualified Web.VirtualDom.Html.Events     as E   
 
 import           Lubeck.App                     (Html)
-import           Lubeck.FRP
 import           Lubeck.Forms.Select
-import qualified Lubeck.FRP                     as F
+import           Lubeck.FRP                     
 import           Lubeck.Util                    (showJS)
 import qualified Components.Map                 as Map
-
-
-panel :: [Html] -> Html
-panel = H.div [A.class_ "panel"]
-
-blockPanel :: [Html] -> Html
-blockPanel = H.div [A.class_ "blockPanel"]
-
-cont :: [Html] -> Html
-cont = H.div [A.class_ "contPanel"]
-
-button :: JSString -> (E.Event -> IO ()) -> Html
-button l h = H.button [A.class_ "button", E.click h] [H.text l]
-
-label :: JSString -> Html
-label t = H.span [A.class_ "label"] [H.text t]
-
-vlayout :: Html -> Html -> Html -> Html -> Html
-vlayout v1 v2 v3 v4 = 
-    blockPanel 
-        [ blockPanel [v1]
-        , blockPanel [v2]
-        , blockPanel [v3]
-        , blockPanel [v4]
-        ]
-
-hlayout :: Html -> Html -> Html -> Html -> Html
-hlayout v1 v2 v3 v4 = 
-    cont 
-        [ panel [v1]
-        , panel [v2]
-        , panel [v3]
-        , panel [v4]
-        ]
+import           UICombinators
 
 
 data Action = Inc | Dec
@@ -85,6 +44,8 @@ counterComponent z = do
                         , button "+" (const $ u Inc) 
                         ]
 
+--------------------------------------------------------------------------------
+
 data Op = Op0 | Op1 | Op2 | Op3 deriving (Eq)
 
 opComponent :: Signal Int -> FRP (Signal Html, Signal Int)
@@ -102,14 +63,16 @@ opComponent inp = do
     where
         handler :: Int -> Op -> Int
         handler val Op0 = val
-        handler val Op1 = val^2
-        handler val Op2 = val^3
+        handler val Op1 = val * val
+        handler val Op2 = val * val * val
         handler val Op3 = 0 - val
 
         view :: Sink Op -> Op -> Html
         view u x = panel 
                         [ label "(Op comp.)"
                         , selectWidget [(Op0, "id"), (Op1, "^2"), (Op2, "^3"), (Op3, "0-")] u x ]                        
+
+--------------------------------------------------------------------------------
 
 resComponent :: Signal Int -> FRP (Signal Html)
 resComponent inp = do
@@ -120,6 +83,8 @@ resComponent inp = do
         view :: Int -> Html
         view x = panel [ label "(Result comp.)" 
                        , label $ showJS x ] 
+
+--------------------------------------------------------------------------------
 
 coordComponent ::  Signal (Int, Int) -> FRP (Signal Html, Signal (Double, Double))
 coordComponent inp = do
@@ -138,10 +103,12 @@ coordComponent inp = do
         convertToCoord :: (Int, Int) -> (Double, Double)
         convertToCoord (x, y) = (fromIntegral (x `mod` 90), fromIntegral (y `mod` 180))
 
+--------------------------------------------------------------------------------
+
 mapComponent :: Signal (Double, Double) -> FRP (Signal Html)                        
 mapComponent inp = do
     (v, u, _) <- Map.mapComponent (Map.MapCfg mapTileLayerUrl mapAttribution 15) []
-    subscribeEvent (updates inp) $ updateMarkers u
+    _ <- reactimateIOS $ fmap (updateMarkers u) inp
     u Map.MapInit
     u Map.InvalidateSize
 
@@ -164,7 +131,7 @@ mapComponent inp = do
         mapTileLayerUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         mapAttribution = "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors, Points &copy 2012 LINZ, &copy; Map tiles by MapBox"
 
-
+--------------------------------------------------------------------------------
 
 -- data MetaAction = More | Less
 

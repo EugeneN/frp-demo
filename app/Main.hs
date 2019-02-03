@@ -2,8 +2,9 @@
 
 module Main where
 
-import           Data.Monoid    ((<>))
-import           Lib
+import           Lib            ( counterComponent, opComponent, resComponent 
+                                , mapComponent, coordComponent)
+import           UICombinators  (vlayout, hlayout4)
 import           Lubeck.App     (runAppReactive)
 
 
@@ -25,7 +26,7 @@ main = do
       (v3, outp3) <- opComponent outp2
       v4          <- resComponent outp3
 
-      pure (outp3, hlayout <$> v1 <*> v2 <*> v3 <*> v4)
+      pure (outp3, hlayout4 <$> v1 <*> v2 <*> v3 <*> v4)
 
     pipeline2 = do
       (v1, outp1) <- counterComponent 0
@@ -33,6 +34,6 @@ main = do
       (v3, outp3) <- opComponent outp2
       v4          <- resComponent outp3
 
-      pure (outp3, hlayout <$> v1 <*> v2 <*> v3 <*> v4)
+      pure (outp3, hlayout4 <$> v1 <*> v2 <*> v3 <*> v4)
 
     
