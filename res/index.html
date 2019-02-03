@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-family: Helvetica;
+      }
+      div {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+      }
+      .map-container { 
+        width: 100%;
+        height: 300px;
+        padding: 0px;
+        overflow: hidden;
+      }  
+      .button {
+        background-color: white;
+        border: 1px solid #ccc;
+      }
+      .contPanel {
+        margin: 0px;
+        padding: 0px;
+        width: auto;
+        display: flex;
+        background-color: transparent;
+        border: 0px solid #ccc;
+      }
+      .panel {
+        margin: 1px;
+        padding: 5px;
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: stretch;
+        background-color: greenyellow;
+        border: 0px solid #ccc;
+      }
+      .blockPanel {
+        margin: 5px;
+        padding: 10px;
+        display: block;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        width: auto;
+        background-color: white;
+        border: 1px solid #ccc;
+      }
+      .label {
+        padding: 5px 10px;
+      }
+    </style>
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <link rel="stylesheet" href="leaflet/MarkerCluster.css" />
+    <link rel="stylesheet" href="leaflet/MarkerCluster.Default.css" />
+    <script src="leaflet/leaflet.js" ></script>
+    <script>L.Icon.Default.imagePath="leaflet/images/"</script>
+    <script src="leaflet/leaflet.markercluster.js"></script>
+
+    <script language="javascript" src="rts.js"></script>
+    <script language="javascript" src="lib.js"></script>
+    <script language="javascript" src="out.js"></script>
+  </head>
+  <body>
+  </body>
+  <script language="javascript" src="runmain.js" defer></script>
+</html>
