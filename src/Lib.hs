@@ -129,7 +129,7 @@ mapComponent inp = do
             u $ Map.AddClusterLayer $ makeMarkers lat lon
 
         mapTileLayerUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        mapAttribution = "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors, Points &copy 2012 LINZ, &copy; Map tiles by MapBox"
+        mapAttribution = "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
 
 --------------------------------------------------------------------------------
 
